@@ -327,7 +327,12 @@ const WeatherCard = () => {
           <div>Fahrenheit</div>
         </label>
       </div>
+      <div className="sub-info-datatitle">
+            Current Weather Today, {currentWeather.timezone}
+          </div>
       <div className="currentWeather">
+      
+
         <div className="main-info">
           <div className="temp-measurement">{currentWeather.mainTemp}</div>
           <div className="temp-unit">
@@ -335,10 +340,7 @@ const WeatherCard = () => {
           </div>
         </div>
         <div className="sub-info">
-          <div className="sub-info-datatitle">
-            Current Weather Today, {currentWeather.timezone}
-          </div>
-
+        
           <div className="sub-info-text">{currentWeather.main}</div>
 
           <div className="sub-info-text">
