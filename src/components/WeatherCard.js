@@ -64,6 +64,7 @@ const WeatherCard = () => {
             main: data.weather[0].main,
             timezone: calcTime(data.timezone),
             mainTemp: Math.round(data.main.temp),
+            warning: showWarning(Math.round(data.main.temp_min),Math.round(data.main.temp_max)),
             temp: {
               min: Math.round(data.main.temp_min),
               max: Math.round(data.main.temp_max),
@@ -229,8 +230,18 @@ const WeatherCard = () => {
 
   const onSearchSubmit = (city) => {
     setState({ city, tempUnits: "celsius", tempSymbol: "°C" });
-    // setCurrentWeather({ city, tempSymbol: "°C" });
-    // setCurrentWeather
+    
+  };
+  // Showing warnings for the temperature
+  const showWarning = (minTemp, maxTemp)=>{
+      if(minTemp >= 15 && maxTemp <= 25 ){
+        return "Temperatures are warm today";
+      }
+      if(minTemp < 15){
+        return "Morning is cold";
+      }
+      if(maxTemp > 25) return "Maximum temperatures are high";
+    
   };
 
   const toCelsius = (fahrenheit) => {
@@ -344,6 +355,7 @@ const WeatherCard = () => {
           <div className="sub-info-text">{currentWeather.main}</div>
 
           <div className="sub-info-text">
+            <div className="weather-warning">{currentWeather.warning}</div>
             <span className="max-temp">
               <i className="mdi mdi-arrow-up" />
               {`${currentWeather.temp.min} ${state.tempSymbol}`}
