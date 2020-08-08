@@ -42,12 +42,25 @@ const WeatherCard = () => {
 
     const localOffset = date.getTimezoneOffset() * 60000;
     const uct = localTime + localOffset;
-    const remoteTime = uct + (1000 * timezone);
+    const remoteTime = uct + 1000 * timezone;
 
     const shiftedTimezone = new Date(remoteTime);
     return (
-      shiftedTimezone.toDateString() + " at " + shiftedTimezone.toTimeString().split(" ")[0]
+      shiftedTimezone.toDateString() +
+      " at " +
+      shiftedTimezone.toTimeString().split(" ")[0]
     );
+  };
+
+  // Showing warnings for the temperature
+  const showWarning = (minTemp, maxTemp) => {
+    if (minTemp >= 15 && maxTemp <= 25) {
+      return "Temperatures are warm today";
+    }
+    if (minTemp < 15) {
+      return "Morning is cold";
+    }
+    if (maxTemp > 25) return "Maximum temperatures are high";
   };
 
   useEffect(() => {
@@ -64,7 +77,10 @@ const WeatherCard = () => {
             main: data.weather[0].main,
             timezone: calcTime(data.timezone),
             mainTemp: Math.round(data.main.temp),
-            warning: showWarning(Math.round(data.main.temp_min),Math.round(data.main.temp_max)),
+            warning: showWarning(
+              Math.round(data.main.temp_min),
+              Math.round(data.main.temp_max)
+            ),
             temp: {
               min: Math.round(data.main.temp_min),
               max: Math.round(data.main.temp_max),
@@ -75,7 +91,11 @@ const WeatherCard = () => {
             keepCalling();
           }, 1200000); // 20min
         })
-        .catch(() => {});
+        .catch(() => {
+          setTimeout(() => {
+            keepCalling();
+          }, 1200000);
+        });
     };
 
     keepCalling();
@@ -177,7 +197,6 @@ const WeatherCard = () => {
    * @param {Function} apiCaller - makes api call
    * @param {number} delay - a deplay timer for re-retrying
    */
-
   const loopCall = useCallback(
     async (apiCaller, delay) => {
       const retry = await apiCaller().then((response) => {
@@ -226,22 +245,9 @@ const WeatherCard = () => {
   useEffect(() => {
     loopCall(makeCall, 2000);
   }, [loopCall, state.city, makeCall]);
- 
 
   const onSearchSubmit = (city) => {
     setState({ city, tempUnits: "celsius", tempSymbol: "°C" });
-    
-  };
-  // Showing warnings for the temperature
-  const showWarning = (minTemp, maxTemp)=>{
-      if(minTemp >= 15 && maxTemp <= 25 ){
-        return "Temperatures are warm today";
-      }
-      if(minTemp < 15){
-        return "Morning is cold";
-      }
-      if(maxTemp > 25) return "Maximum temperatures are high";
-    
   };
 
   const toCelsius = (fahrenheit) => {
@@ -339,11 +345,9 @@ const WeatherCard = () => {
         </label>
       </div>
       <div className="sub-info-datatitle">
-            Current Weather Today, {currentWeather.timezone}
-          </div>
+        Current Weather Today, {currentWeather.timezone}
+      </div>
       <div className="currentWeather">
-      
-
         <div className="main-info">
           <div className="temp-measurement">{currentWeather.mainTemp}</div>
           <div className="temp-unit">
@@ -351,7 +355,6 @@ const WeatherCard = () => {
           </div>
         </div>
         <div className="sub-info">
-        
           <div className="sub-info-text">{currentWeather.main}</div>
 
           <div className="sub-info-text">
