@@ -77,6 +77,7 @@ const WeatherCard = () => {
             main: data.weather[0].main,
             timezone: calcTime(data.timezone),
             mainTemp: Math.round(data.main.temp),
+            // warning: showWarning(34, 24),
             warning: showWarning(
               Math.round(data.main.temp_min),
               Math.round(data.main.temp_max)
@@ -347,6 +348,7 @@ const WeatherCard = () => {
       <div className="sub-info-datatitle">
         Current Weather Today, {currentWeather.timezone}
       </div>
+      <div className="weather-warning">{currentWeather.warning}</div>
       <div className="currentWeather">
         <div className="main-info">
           <div className="temp-measurement">{currentWeather.mainTemp}</div>
@@ -356,9 +358,9 @@ const WeatherCard = () => {
         </div>
         <div className="sub-info">
           <div className="sub-info-text">{currentWeather.main}</div>
-
+    
           <div className="sub-info-text">
-            <div className="weather-warning">{currentWeather.warning}</div>
+            
             <span className="max-temp">
               <i className="mdi mdi-arrow-up" />
               {`${currentWeather.temp.min} ${state.tempSymbol}`}

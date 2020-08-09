@@ -121,3 +121,11 @@
 .options-container input:checked+div {
     background-color: #82d240;
 }
+.weather-warning{
+    color: #9f6000;
+    background-color: #feefb3;
+    margin: auto;
+    padding: 10px;
+    border-radius: 3px;
+    width: 50%;
+}
