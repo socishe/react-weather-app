@@ -32,7 +32,7 @@ const WeatherCard = () => {
   const [error, setError] = useState(false);
   const [retrying, setRetrying] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
-
+  const [warning, setWarning] = useState('');
   /**
    * Change to current timezone
    */
@@ -62,16 +62,15 @@ const WeatherCard = () => {
         .get(URL)
         .then((response) => {
           const { data } = response;
-
+          setWarning( showWarning(
+            Math.round(data.main.temp_min),
+            Math.round(data.main.temp_max)
+          ))
           setCurrentWeather({
             icon: data.weather[0].icon,
             main: data.weather[0].main,
             timezone: calcTime(data.timezone),
             mainTemp: Math.round(data.main.temp),
-            warning: showWarning(
-              Math.round(data.main.temp_min),
-              Math.round(data.main.temp_max)
-            ),
             temp: {
               min: Math.round(data.main.temp_min),
               max: Math.round(data.main.temp_max),
@@ -356,7 +355,7 @@ const WeatherCard = () => {
       <div className="sub-info-datatitle">
         Current Weather Today, {currentWeather.timezone}
       </div>
-      <div className="weather-warning">{currentWeather.warning}</div>
+      <div className="weather-warning">{warning}</div>
       <div className="currentWeather">
         <div className="main-info">
           <div className="temp-measurement">{currentWeather.mainTemp}</div>
