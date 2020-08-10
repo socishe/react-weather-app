@@ -18,11 +18,11 @@ const WeatherCard = () => {
     icon: "",
     main: "",
     tempUnits: "celsius",
-    mainTemp: 0,
+    mainTemp: 20,
     timezone: "",
     temp: {
-      min: 0,
-      max: 0,
+      min: 12,
+      max: 23,
     },
   });
 
@@ -52,16 +52,7 @@ const WeatherCard = () => {
     );
   };
 
-  // Showing warnings for the temperature
-  const showWarning = (minTemp, maxTemp) => {
-    if (minTemp >= 15 && maxTemp <= 25) {
-      return "Temperatures are warm today";
-    }
-    if (minTemp < 15) {
-      return "Morning is cold";
-    }
-    if (maxTemp > 25) return "Maximum temperatures are high";
-  };
+
 
   useEffect(() => {
     const keepCalling = () => {
@@ -77,7 +68,6 @@ const WeatherCard = () => {
             main: data.weather[0].main,
             timezone: calcTime(data.timezone),
             mainTemp: Math.round(data.main.temp),
-            // warning: showWarning(34, 24),
             warning: showWarning(
               Math.round(data.main.temp_min),
               Math.round(data.main.temp_max)
@@ -98,8 +88,10 @@ const WeatherCard = () => {
           }, 1200000);
         });
     };
-
+    
     keepCalling();
+
+
   }, [state.city]);
 
   /**
@@ -191,6 +183,21 @@ const WeatherCard = () => {
         });
     });
   }, [state.city]);
+  // Showing warnings for the temperature
+  const showWarning = (minTemp, maxTemp, tempUnits) => {
+    // if(tempUnits !== "celsius"){
+    //   minTemp = toCelsius(minTemp);
+    //   maxTemp = toCelsius(maxTemp);
+    // }
+    if (minTemp >= 15 && maxTemp <= 25) {
+      return "Temperatures are warm today";
+    }
+    if (minTemp < 15) {
+      
+      return "Morning is cold";
+    }
+    if (maxTemp > 25) return "Maximum temperatures are high";
+  };
 
   /**
    * Exponetially delay re-try periods, until successful
@@ -274,6 +281,7 @@ const WeatherCard = () => {
 
     if (value !== "celsius") {
       symbol = "°F";
+      showWarning();
     }
 
     /**
